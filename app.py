@@ -24,7 +24,7 @@ totala_dagar_horisont = (horisont_slut - denna_manad_start).days
 chart_data = []
 
 # 1. Lägg till den blekta "Nu-månaden"
-chart_data.append(dict(Fas="Status", Start=denna_manad_start, Slut=denna_manad_start + relativedelta(months=1), 
+chart_data.append(dict(Fas="Aktuell månad", Start=denna_manad_start, Slut=denna_manad_start + relativedelta(months=1), 
                        Status="Nu-Period", Text="Aktuell Månad"))
 
 # 2. Skapa individuella block för varje månad i horisonten
