@@ -4,9 +4,10 @@ import plotly.express as px
 from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
-st.set_page_config(page_title="PO-Horisont Visualisering", layout="wide")
+st.set_page_config(page_title="PO-Horisont med Dagsvisning", layout="wide")
 
-st.title("🔄 Rolling PO-Horizon & Ledtid")
+st.title("📅 Detaljerad PO-Horisont")
+st.write("Här kan du se exakt vilka dagar som täcks av din horisont.")
 
 # --- INPUTS ---
 st.sidebar.header("Inställningar")
@@ -16,20 +17,19 @@ fysisk_ledtid_dagar = st.sidebar.number_input("Faktisk fysisk ledtid (Dagar)", m
 
 # --- BERÄKNINGAR ---
 denna_manad_start = idag.replace(day=1)
+# Vi räknar ut exakt slutdatum baserat på månader
 horisont_slut = denna_manad_start + relativedelta(months=horisont_manader)
 produktion_start = horisont_slut - relativedelta(days=fysisk_ledtid_dagar)
-
-# Beräkna totala dagar i horisonten för jämförelse
 totala_dagar_horisont = (horisont_slut - denna_manad_start).days
 
 # --- DATA FÖR GRAF ---
 data = [
     dict(Fas="1. Aktuell månad", Start=denna_manad_start, Slut=denna_manad_start + relativedelta(months=1), 
-         Status="Pågående", Beskrivning="Nuvarande period"),
-    dict(Fas="2. PO-Horisont (Totalt)", Start=denna_manad_start, Slut=horisont_slut, 
-         Status="Bindande", Beskrivning=f"Låst i {totala_dagar_horisont} dagar"),
-    dict(Fas="3. Fysiskt flöde", Start=produktion_start, Slut=horisont_slut, 
-         Status="Produktion", Beskrivning=f"Faktisk tid: {fysisk_ledtid_dagar} dagar")
+         Status="Pågående", Beskrivning="Här är vi nu"),
+    dict(Fas="2. PO-Horisont (Låst)", Start=denna_manad_start, Slut=horisont_slut, 
+         Status="Bindande", Beskrivning=f"Totalt låst: {totala_dagar_horisont} dagar"),
+    dict(Fas="3. Fysisk Produktion", Start=produktion_start, Slut=horisont_slut, 
+         Status="Produktion", Beskrivning=f"Produktionstid: {fysisk_ledtid_dagar} dagar")
 ]
 
 df = pd.DataFrame(data)
@@ -43,30 +43,30 @@ fig = px.timeline(df, x_start="Start", x_end="Slut", y="Fas", color="Status",
                      "Produktion": "#0068C9"
                  })
 
-# Fixa X-axeln så den visar varje månad
+# --- FIXA AXELN FÖR DAGAR OCH MÅNADER ---
 fig.update_xaxes(
-    dtick="M1", # "M1" betyder "varje 1 månad"
-    tickformat="%b\n%Y", # Visar månadsnamn och år
-    ticklabelmode="period"
+    dtick="M1",              # En markering per månad
+    tickformat="%d %b\n%Y",  # Visar "Dag Månad År" (t.ex. 01 Jan 2026)
+    ticklabelmode="period",
+    showgrid=True,           # Visa linjer
+    gridwidth=1,
+    gridcolor='LightGrey'
 )
 
+# Lägg till finare linjer för veckor (valfritt men snyggt)
+fig.update_xaxes(minor=dict(dtick=7*24*60*60*1000, showgrid=True, gridcolor='WhiteSmoke'))
+
 fig.update_yaxes(autorange="reversed")
-fig.update_layout(showlegend=False, height=400)
+fig.update_layout(showlegend=True, height=500)
 
 st.plotly_chart(fig, use_container_width=True)
 
-# --- SAMMANFATTNING ---
-st.markdown("---")
-c1, c2, c3 = st.columns(3)
-with c1:
-    st.metric("Total horisont", f"{horisont_manader} mån")
-    st.caption(f"Motsvarar ca {totala_dagar_horisont} dagar")
-with c2:
-    st.metric("Fysisk ledtid", f"{fysisk_ledtid_dagar} dagar")
-    st.caption("Tid för produktion & frakt")
-with c3:
-    gap = totala_dagar_horisont - fysisk_ledtid_dagar
-    st.metric("Administrativ väntetid", f"{gap} dagar")
-    st.caption("Tid där ordern är låst men ej startad")
-
-st.info(f"Här ser du att leverantören vill ha ordern **{gap} dagar** innan de ens behöver börja baka tårtan!")
+# --- INFO BOXAR ---
+st.markdown(f"### Detaljer för din ordermatta")
+col1, col2 = st.columns(2)
+with col1:
+    st.info(f"**Startdatum (Beställning):** {denna_manad_start}")
+    st.info(f"**Slutdatum (Leverans):** {horisont_slut}")
+with col2:
+    st.success(f"**Produktionen startar:** {produktion_start.date()}")
+    st.warning(f"**Dagar i 'Vänteläge':** {totala_dagar_horisont - fysisk_ledtid_dagar} dagar")
