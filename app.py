@@ -36,7 +36,7 @@ for i in range(horisont_manader):
 
 # 3. Lägg till produktionsflödet som en egen rad längst ner
 chart_data.append(dict(Fas="Produktion", Start=produktion_start, Slut=horisont_slut, 
-                       Status="Produktion", Text=f"Fysisk ledtid ({fysisk_ledtid_dagar} dgr)"))
+                       Status="Produktion", Text=f"Produktion + transport ledtid ({fysisk_ledtid_dagar} dgr)"))
 
 df = pd.DataFrame(chart_data)
 
