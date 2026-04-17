@@ -52,7 +52,7 @@ fig = px.timeline(df, x_start="Start", x_end="Slut", y="Fas", color="Status",
                  })
 
 # Fixa utseendet
-fig.update_xaxes(range=[denna_manad_start - relativedelta(months=1), horisont_slut + relativedelta(months=3)], dtick="M1", tickformat="%b %Y", ticklabelmode="period", showgrid=True)
+fig.update_xaxes(range=[denna_manad_start - relativedelta(months=1), horisont_slut + relativedelta(months=2)], dtick="M1", tickformat="%b %Y", ticklabelmode="period", showgrid=True)
 fig.update_traces(textposition='inside', insidetextanchor='middle', textfont_size=18, marker_line_color="white", marker_line_width=2)
 fig.update_yaxes(autorange="reversed")
 fig.update_layout(showlegend=False, height=450, dragmode='pan')
