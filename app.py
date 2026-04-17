@@ -45,13 +45,13 @@ fig = px.timeline(df, x_start="Start", x_end="Slut", y="Fas", color="Status",
                  text="Text", 
                  color_discrete_map={
                      "Nu-Period": "#008000", 
-                     "Låst tid": "#FF4B4B", 
+                     "Låst tid": "#Ff0000", 
                      "Produktion": "#0068C9"
                  })
 
 # Fixa utseendet
 fig.update_xaxes(range=[denna_manad_start - relativedelta(months=1), horisont_slut + relativedelta(months=2)], dtick="M1", tickformat="%b %Y", ticklabelmode="period", showgrid=True)
-fig.update_traces(textposition='inside', textfont_color="white", insidetextanchor='middle', textfont_size=18, marker_line_color="black", marker_line_width=2)
+fig.update_traces(textposition='inside', textfont_color="white", insidetextanchor='middle', textfont_size=18, marker_line_color="white", marker_line_width=1)
 fig.update_yaxes(autorange="reversed")
 fig.update_layout(showlegend=False, height=450, dragmode='pan')
 
