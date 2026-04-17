@@ -66,7 +66,7 @@ with col1:
     st.caption("Tid vi låser oss i SAP")
 
 with col2:
-    st.metric("Fysisk ledtid", f"{fysisk_ledtid_dagar} dgr")
+    st.metric("Produktion + transport ledtid", f"{fysisk_ledtid_dagar} dgr")
     # Vi räknar ut månader genom att dela med 30 (snittmånad)
     prod_man = round(fysisk_ledtid_dagar / 30, 1)
     st.write(f"**{prod_man} månader**")
