@@ -40,8 +40,6 @@ chart_data.append(dict(Fas="Produktion", Start=produktion_start, Slut=horisont_s
 
 df = pd.DataFrame(chart_data)
 
-st.markdown(f"### {horisont_manader} månader motsvarar ca **{totala_dagar_horisont} dagar**")
-
 # --- FIGUR ---
 fig = px.timeline(df, x_start="Start", x_end="Slut", y="Fas", color="Status",
                  text="Text", 
