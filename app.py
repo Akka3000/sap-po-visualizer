@@ -44,7 +44,7 @@ df = pd.DataFrame(chart_data)
 fig = px.timeline(df, x_start="Start", x_end="Slut", y="Fas", color="Status",
                  text="Text", 
                  color_discrete_map={
-                     "Nu-Period": "#FFD700", 
+                     "Nu-Period": "#008000", 
                      "Låst tid": "#FF4B4B", 
                      "Produktion": "#0068C9"
                  })
