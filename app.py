@@ -46,7 +46,7 @@ fig = px.timeline(df, x_start="Start", x_end="Slut", y="Fas", color="Status",
                  color_discrete_map={
                      "Nu-Period": "#008000", 
                      "Låst tid": "#Ff0000", 
-                     "Produktion": "#4D79FF"
+                     "Produktion": "#1A1AFF"
                  })
 
 # Fixa utseendet
