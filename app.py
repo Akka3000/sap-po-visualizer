@@ -64,8 +64,20 @@ st.markdown("---")
 col1, col2, col3 = st.columns(3)
 with col1:
     st.metric("Total horisont", f"{horisont_manader} mån")
+    st.write(f"**{totala_dagar_horisont} dagar**")
+    st.caption("Tid vi låser oss i SAP")
+
 with col2:
     st.metric("Fysisk ledtid", f"{fysisk_ledtid_dagar} dgr")
+    # Vi räknar ut månader genom att dela med 30 (snittmånad)
+    prod_man = round(fysisk_ledtid_dagar / 30, 1)
+    st.write(f"**{prod_man} månader**")
+    st.caption("Tid för faktisk produktion")
+
 with col3:
     gap_dagar = totala_dagar_horisont - fysisk_ledtid_dagar
     st.metric("Leverantörens frihet", f"{gap_dagar} dgr")
+    # Samma här, räknar om gapet till månader
+    gap_man = round(gap_dagar / 30, 1)
+    st.write(f"**{gap_man} månader**")
+    st.caption("Tid ordern ligger 'stilla'")
