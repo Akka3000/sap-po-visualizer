@@ -28,7 +28,7 @@ manads_nummer_str = "        ".join([str(i+1) for i in range(horisont_manader)])
 # --- DATA FÖR GRAF ---
 data = [
     dict(Fas="1. Aktuell månad", Start=denna_manad_start, Slut=denna_manad_start + relativedelta(months=1), 
-         Status="Nu-Period", Text="IDAG"), # Här ändrade vi status-namnet
+         Status="Nu-Period", Text="Aktuell Månad"), # Här ändrade vi status-namnet
     dict(Fas="2. PO-Horisont (Bindande)", Start=denna_manad_start, Slut=horisont_slut, 
          Status="Låst tid", Text=manads_nummer_str),
     dict(Fas="3. Fysiskt flöde", Start=produktion_start, Slut=horisont_slut, 
