@@ -19,23 +19,26 @@ denna_manad_start = idag.replace(day=1)
 horisont_slut = denna_manad_start + relativedelta(months=horisont_manader)
 produktion_start = horisont_slut - relativedelta(days=fysisk_ledtid_dagar)
 totala_dagar_horisont = (horisont_slut - denna_manad_start).days
-gap_dagar = totala_dagar_horisont - fysisk_ledtid_dagar
+
+# Skapa en textsträng för månadsnummer (t.ex. "1  2  3  4  5  6  7")
+manads_nummer_str = "    ".join([str(i+1) for i in range(horisont_manader)])
 
 # --- DATA FÖR GRAF ---
-# Vi lägger till en kolumn 'Dagar' för att visa siffror i grafen
 data = [
     dict(Fas="1. Aktuell månad", Start=denna_manad_start, Slut=denna_manad_start + relativedelta(months=1), 
          Status="Pågående", Text="Nu"),
     dict(Fas="2. PO-Horisont (Bindande)", Start=denna_manad_start, Slut=horisont_slut, 
-         Status="Låst tid", Text=f"{totala_dagar_horisont} dagar totalt"),
+         Status="Låst tid", Text=manads_nummer_str),
     dict(Fas="3. Fysiskt flöde", Start=produktion_start, Slut=horisont_slut, 
-         Status="Produktion", Text=f"{fysisk_ledtid_dagar} dagar prod.")
+         Status="Produktion", Text="Produktion")
 ]
 
 df = pd.DataFrame(data)
 
+# --- TEXT UNDER RUBRIK ---
+st.markdown(f"### {horisont_manader} månader motsvarar ca **{totala_dagar_horisont} dagar**")
+
 # --- FIGUR ---
-# Vi använder 'text' parametern för att visa siffrorna i staplarna
 fig = px.timeline(df, x_start="Start", x_end="Slut", y="Fas", color="Status",
                  text="Text", 
                  color_discrete_map={
@@ -52,8 +55,8 @@ fig.update_xaxes(
     showgrid=True
 )
 
-# Gör texten i staplarna tydlig
-fig.update_traces(textposition='inside', insidetextanchor='middle')
+# Centrera månadsnumren inuti staplarna
+fig.update_traces(textposition='inside', insidetextanchor='middle', textfont_size=16)
 fig.update_yaxes(autorange="reversed")
 fig.update_layout(showlegend=False, height=400)
 
@@ -65,14 +68,13 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     st.metric("Total horisont", f"{horisont_manader} mån")
-    st.write(f"Låst t.o.m: **{horisont_slut.strftime('%Y-%m-%d')}**")
+    st.write(f"Totalt antal dagar: **{totala_dagar_horisont}**")
 
 with col2:
     st.metric("Fysisk ledtid", f"{fysisk_ledtid_dagar} dgr")
-    st.write(f"Faktiskt jobb startar: **{produktion_start.strftime('%Y-%m-%d')}**")
+    st.write(f"Produktionsmånader: **{round(fysisk_ledtid_dagar/30, 1)} st**")
 
 with col3:
-    st.metric("Låst utan produktion", f"{gap_dagar} dgr")
-    st.write(f"Dagar leverantören 'väntar': **{gap_dagar}**")
-
-st.warning(f"**Analys:** Under de första **{gap_dagar} dagarna** av horisonten händer ingenting fysiskt. Leverantören kan använda denna tid precis hur de vill, medan ni redan är bundna vid köpet.")
+    gap_dagar = totala_dagar_horisont - fysisk_ledtid_dagar
+    st.metric("Leverantörens frihet", f"{gap_dagar} dgr")
+    st.write(f"Tid utan produktion: **{gap_dagar} dagar**")
