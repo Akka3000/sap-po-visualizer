@@ -55,7 +55,7 @@ fig = px.timeline(df, x_start="Start", x_end="Slut", y="Fas", color="Status",
 fig.update_xaxes(dtick="M1", tickformat="%b %Y", ticklabelmode="period", showgrid=True)
 fig.update_traces(textposition='inside', insidetextanchor='middle', textfont_size=18, marker_line_color="white", marker_line_width=2)
 fig.update_yaxes(autorange="reversed")
-fig.update_layout(showlegend=False, height=450)
+fig.update_layout(showlegend=False, height=450, dragmode='pan')
 
 st.plotly_chart(fig, use_container_width=True)
 
