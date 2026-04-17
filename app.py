@@ -64,9 +64,15 @@ st.plotly_chart(fig, use_container_width=True)
 # --- INFO BOXAR ---
 st.markdown(f"### Detaljer för din ordermatta")
 col1, col2 = st.columns(2)
+
+# Vi säkerställer att vi visar datumen snyggt oavsett format
+start_str = denna_manad_start.strftime('%Y-%m-%d')
+slut_str = horisont_slut.strftime('%Y-%m-%d')
+prod_start_str = produktion_start.strftime('%Y-%m-%d')
+
 with col1:
-    st.info(f"**Startdatum (Beställning):** {denna_manad_start}")
-    st.info(f"**Slutdatum (Leverans):** {horisont_slut}")
+    st.info(f"**Startdatum (Beställning):** {start_str}")
+    st.info(f"**Slutdatum (Leverans):** {slut_str}")
 with col2:
-    st.success(f"**Produktionen startar:** {produktion_start.date()}")
+    st.success(f"**Produktionen startar:** {prod_start_str}")
     st.warning(f"**Dagar i 'Vänteläge':** {totala_dagar_horisont - fysisk_ledtid_dagar} dagar")
