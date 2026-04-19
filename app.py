@@ -10,6 +10,7 @@ st.title("🔄 PO-Horisont: Månadsöversikt")
 
 # --- INPUTS ---
 st.sidebar.header("Inställningar")
+
 horisont_manader = st.sidebar.number_input("Bindande horisont (Månader)", min_value=1, max_value=24, value=7)
 idag = st.sidebar.date_input("Simulera dagens datum", date.today())
 fysisk_ledtid_dagar = st.sidebar.number_input("Produktion + transport ledtid (Dagar)", min_value=1, max_value=500, value=70)
